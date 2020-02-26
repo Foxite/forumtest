@@ -1,0 +1,7 @@
+.listing {
+    padding: 0.5em;
+}
+
+.listing thead tr {
+    border-bottom: 1px solid #333;
+}

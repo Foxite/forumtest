@@ -1,0 +1,53 @@
+#container {
+    width: 100%;
+    height: 100%;
+    font-family: Roboto, sans-serif;
+    padding: 1em 2em 1em 2em;
+}
+
+.clear {
+    clear: both;
+}
+
+#header {
+    background-color: #EEEEEE;
+    margin-bottom: 1em;
+}
+
+#pageTitle {
+    font-weight: 700;
+    font-size: 2em;
+}
+
+#pageCaption {
+    font-weight: 350;
+    font-size: 1em;
+    font-style: italic;
+}
+
+#navigation {
+    padding-top: 0.5em;
+    display: block;
+}
+
+#navigation ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+#navigation ul li {
+    float: left;
+    padding: 0.5em 0.8em 0.5em 0.8em;
+}
+
+#navigation li {
+    display: block;
+    color: white;
+}
+
+#navigation li:hover {
+    background-color: black;
+}
