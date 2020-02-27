@@ -26,78 +26,92 @@
 
 require_once("include/database.php");
 
-$listings = array(
-    0 => array(
-        "title" => "Listing",
-        "desc" => "Our one and only Listing™",
-        "forums" => array(
-            0 => array(
-                "title" => "Forum 1",
-                "desc" => "OG",
-                "postCount" => 41,
-                "topicCount" => 12,
-                "lastPost" => array(
-                    "user" => "Admin",
-                    "topic" => "This is a topic",
-                    "timestamp" => time() - 5000
-                )
-            ),
-            1 => array(
-                "title" => "Forum 2",
-                "desc" => "Electric Boogaloo",
-                "postCount" => 256,
-                "topicCount" => 50,
-                "lastPost" => array(
-                    "user" => "Foxite",
-                    "topic" => "This is also topic",
-                    "timestamp" => time() - 3000
-                )
-            ),
-            2 => array(
-                "title" => "Forum 3",
-                "desc" => "The Third",
-                "postCount" => 3,
-                "topicCount" => 4,
-                "lastPost" => array(
-                    "user" => "User",
-                    "topic" => "I am running out of topic ideas",
-                    "timestamp" => time() - 2000
-                )
-            ),
-        )
-    )
+$result = $db->query(
+    "SELECT
+        c.title AS ctitle, c.description AS cdesc,
+        f.id, f.title, f.description, f.post_count, f.topic_count, f.last_post_id,
+        p.user_id, p.title, p.topic_id, p.timestamp
+    FROM forum_categories AS c
+    LEFT JOIN forums AS f ON (f.id = c.id)
+    LEFT JOIN posts AS p ON (p.id = f.last_post_id)"
 );
 
-for ($listingIndex = 0; $listingIndex < count($listings); $listingIndex++) {
-    $listing = $listings[$listingIndex];
-    ?>
-    <table class="listing">
-    <thead class="listingHeader"><tr>
-    <td class="listingTitle"><?php echo($listing["title"]); ?></td>
-    <td colspan="2" class="listingDescription"><?php echo($listing["desc"]); ?></td>
-    </tr></thead><tbody>
-    <?php
-    for ($forumIndex = 0; $forumIndex < count($listing["forums"]); $forumIndex++) {
-        $forum = $listing["forums"][$forumIndex];
-        ?><tr class="forum">
-        <td class="forumInfo">
-        <div class="forumTitle"><a href="f/<?php echo($forumIndex); ?>"><?php echo($forum["title"]); ?></a></div>
-        <div class="forumDesc"><?php echo($forum["desc"]); ?></div>
-        </td>
-        <td class="forumStats">
-        <div class="forumPosts"><?php echo($forum["postCount"]); ?> posts</div>
-        <div class="forumTopics"><?php echo($forum["topicCount"]); ?> topics</div>
-        </td>
-        <td class="forumLastPost">
-        <div class="forumLastPostUser">Last post by <?php echo($forum["lastPost"]["user"]); ?></div>
-        <div class="forumLastPostTopic">in <?php echo($forum["lastPost"]["topic"]); ?></div>
-        <div class="forumLastPostDate">on <?php echo(date("D, d M Y H:i:s", $forum["lastPost"]["timestamp"])); ?></div>
-        </td>
-        </tr><?php
+if ($result->num_rows > 0) {
+    /*$listings = array(
+        0 => array(
+            "title" => "Listing",
+            "desc" => "Our one and only Listing™",
+            "forums" => array(
+                0 => array(
+                    "title" => "Forum 1",
+                    "desc" => "OG",
+                    "postCount" => 41,
+                    "topicCount" => 12,
+                    "lastPost" => array(
+                        "user" => "Admin",
+                        "topic" => "This is a topic",
+                        "timestamp" => time() - 5000
+                    )
+                ),
+                1 => array(
+                    "title" => "Forum 2",
+                    "desc" => "Electric Boogaloo",
+                    "postCount" => 256,
+                    "topicCount" => 50,
+                    "lastPost" => array(
+                        "user" => "Foxite",
+                        "topic" => "This is also topic",
+                        "timestamp" => time() - 3000
+                    )
+                ),
+                2 => array(
+                    "title" => "Forum 3",
+                    "desc" => "The Third",
+                    "postCount" => 3,
+                    "topicCount" => 4,
+                    "lastPost" => array(
+                        "user" => "User",
+                        "topic" => "I am running out of topic ideas",
+                        "timestamp" => time() - 2000
+                    )
+                ),
+            )
+        )
+    );*/
+    while ($listing = $result->fetch_assoc()) {
+        ?>
+        <table class="listing">
+        <thead class="listingHeader"><tr>
+        <td class="listingTitle"><?php echo($listing["title"]); ?></td>
+        <td colspan="2" class="listingDescription"><?php echo($listing["desc"]); ?></td>
+        </tr></thead><tbody>
+        <?php
+        for ($forumIndex = 0; $forumIndex < count($listing["forums"]); $forumIndex++) {
+            $forum = $listing["forums"][$forumIndex];
+            ?><tr class="forum">
+            <td class="forumInfo">
+            <div class="forumTitle"><a href="f/<?php echo($forumIndex); ?>"><?php echo($forum["title"]); ?></a></div>
+            <div class="forumDesc"><?php echo($forum["desc"]); ?></div>
+            </td>
+            <td class="forumStats">
+            <div class="forumPosts"><?php echo($forum["postCount"]); ?> posts</div>
+            <div class="forumTopics"><?php echo($forum["topicCount"]); ?> topics</div>
+            </td>
+            <td class="forumLastPost">
+            <div class="forumLastPostUser">Last post by <?php echo($forum["lastPost"]["user"]); ?></div>
+            <div class="forumLastPostTopic">in <?php echo($forum["lastPost"]["topic"]); ?></div>
+            <div class="forumLastPostDate">on <?php echo(date("D, d M Y H:i:s", $forum["lastPost"]["timestamp"])); ?></div>
+            </td>
+            </tr><?php
+        }
+        ?>
+        </tbody></table>
+        <?php
     }
+} else {
     ?>
-    </tbody></table>
-<?php
+    <div class="error">No forums found!</div>
+    <?php
 }
 ?>
 </div>
