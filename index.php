@@ -23,6 +23,9 @@
 <div class="clear"></div>
 <main id="forumBody">
 <div id="listings"><?php
+
+require_once("include/database.php");
+
 $listings = array(
     0 => array(
         "title" => "Listing",
