@@ -2,6 +2,6 @@
     padding: 0.5em;
 }
 
-.listing thead tr {
+.listing thead tr td {
     border-bottom: 1px solid #333;
 }
